@@ -1,0 +1,16 @@
+# Environment
+.env
+
+# Dependencies & vendor
+/vendor/
+
+# Backups & dumps
+/backups/*.sql
+!/backups/.gitkeep
+
+# System & IDE files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
