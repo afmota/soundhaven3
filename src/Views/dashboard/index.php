@@ -15,6 +15,15 @@
             --text-secondary: #94a3b8;
             --accent-start: #8b5cf6;
             --accent-end: #ec4899;
+            --warning-bg: rgba(245, 158, 11, 0.15);
+            --warning-border: rgba(245, 158, 11, 0.4);
+            --warning-text: #fde68a;
+            --success-bg: rgba(16, 185, 129, 0.15);
+            --success-border: rgba(16, 185, 129, 0.4);
+            --success-text: #86efac;
+            --danger-bg: rgba(239, 68, 68, 0.15);
+            --danger-border: rgba(239, 68, 68, 0.4);
+            --danger-text: #fca5a5;
         }
 
         * {
@@ -124,6 +133,46 @@
             width: 100%;
         }
 
+        .alert-banner {
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            line-height: 1.4;
+        }
+
+        .alert-warning {
+            background-color: var(--warning-bg);
+            border: 1px solid var(--warning-border);
+            color: var(--warning-text);
+        }
+
+        .alert-success {
+            background-color: var(--success-bg);
+            border: 1px solid var(--success-border);
+            color: var(--success-text);
+        }
+
+        .alert-danger {
+            background-color: var(--danger-bg);
+            border: 1px solid var(--danger-border);
+            color: var(--danger-text);
+        }
+
+        .alert-icon-text {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 0.98rem;
+        }
+
+        .alert-icon-text i {
+            font-size: 1.4rem;
+        }
+
         .welcome-card {
             background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.1));
             border: 1px solid rgba(139, 92, 246, 0.3);
@@ -144,8 +193,9 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 24px;
+            margin-bottom: 32px;
         }
 
         .card {
@@ -188,6 +238,115 @@
             color: #86efac;
             font-weight: 600;
         }
+
+        /* Seção de Gerenciamento de Usuários Pendentes */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .section-header i {
+            color: #f59e0b;
+        }
+
+        .badge-count {
+            background: #f59e0b;
+            color: #000;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 999px;
+        }
+
+        .pending-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 32px;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.92rem;
+        }
+
+        th {
+            background-color: rgba(255, 255, 255, 0.03);
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn-action {
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-approve {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: #86efac;
+        }
+
+        .btn-approve:hover {
+            background: rgba(16, 185, 129, 0.3);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .btn-reject {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+        }
+
+        .btn-reject:hover {
+            background: rgba(239, 68, 68, 0.3);
+            color: #fff;
+            transform: translateY(-1px);
+        }
     </style>
 </head>
 <body>
@@ -219,9 +378,41 @@
     </header>
 
     <main>
+        <?php if (!empty($mensagemSucesso)): ?>
+            <div class="alert-banner alert-success" role="alert">
+                <div class="alert-icon-text">
+                    <i class="fas fa-check-circle"></i>
+                    <div><?= htmlspecialchars($mensagemSucesso) ?></div>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <?php if (!empty($mensagemErro)): ?>
+            <div class="alert-banner alert-danger" role="alert">
+                <div class="alert-icon-text">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div><?= htmlspecialchars($mensagemErro) ?></div>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($isAdmin && !empty($usuariosPendentes)): ?>
+            <div class="alert-banner alert-warning" role="alert">
+                <div class="alert-icon-text">
+                    <i class="fas fa-bell"></i>
+                    <div>
+                        <strong>Atenção Administrador:</strong> Há <strong><?= count($usuariosPendentes) ?></strong> solicitação(ões) de novo usuário aguardando sua autorização para acesso ao sistema.
+                    </div>
+                </div>
+                <a href="#solicitacoes" style="color: #fde68a; font-size: 0.88rem; font-weight: 600; text-decoration: underline;">
+                    Ver solicitações abaixo &darr;
+                </a>
+            </div>
+        <?php endif; ?>
+
         <div class="welcome-card">
             <h1>Olá, <?= htmlspecialchars($usuarioNome) ?>! 👋</h1>
-            <p>Você está autenticado no <strong>Soundhaven 3</strong>. O sistema de sessões ativas e proteção de rotas está operando normalmente.</p>
+            <p>Você está autenticado no <strong>Soundhaven 3</strong>. O sistema de controle de acesso e proteção de rotas está operando normalmente.</p>
         </div>
 
         <div class="grid">
@@ -234,13 +425,26 @@
                 <div class="card-desc">Registros na tabela <code>tb_albuns</code></div>
             </div>
 
+            <?php if ($isAdmin): ?>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Cadastros Pendentes</span>
+                        <i class="fas fa-user-clock card-icon" style="color: #f59e0b;"></i>
+                    </div>
+                    <div class="card-value" style="color: <?= !empty($usuariosPendentes) ? '#f59e0b' : 'inherit' ?>;">
+                        <?= count($usuariosPendentes) ?>
+                    </div>
+                    <div class="card-desc">Usuários aguardando sua aprovação</div>
+                </div>
+            <?php endif; ?>
+
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">Sessão Atual</span>
                     <i class="fas fa-user-shield card-icon"></i>
                 </div>
                 <div class="card-value"><span class="session-timer">Ativa</span></div>
-                <div class="card-desc">Expira após <strong>30 minutos</strong> sem novas requisições.</div>
+                <div class="card-desc">Expira após <strong>30 minutos</strong> de inatividade.</div>
             </div>
 
             <div class="card">
@@ -252,6 +456,67 @@
                 <div class="card-desc">PHP <?= phpversion() ?> + Nginx + MySQL 8.0</div>
             </div>
         </div>
+
+        <?php if ($isAdmin && !empty($usuariosPendentes)): ?>
+            <div id="solicitacoes">
+                <div class="section-header">
+                    <i class="fas fa-user-check"></i>
+                    <span>Solicitações de Acesso Pendentes</span>
+                    <span class="badge-count"><?= count($usuariosPendentes) ?></span>
+                </div>
+
+                <div class="pending-card">
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome Completo</th>
+                                    <th>Nome de Usuário</th>
+                                    <th>Data da Solicitação</th>
+                                    <th style="text-align: right;">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($usuariosPendentes as $u): ?>
+                                    <tr>
+                                        <td>
+                                            <div style="font-weight: 600;"><?= htmlspecialchars($u['nome']) ?></div>
+                                        </td>
+                                        <td>
+                                            <span style="color: var(--accent-start); font-weight: 500;">
+                                                @<?= htmlspecialchars($u['usuario']) ?>
+                                            </span>
+                                        </td>
+                                        <td style="color: var(--text-secondary); font-size: 0.85rem;">
+                                            <?= date('d/m/Y H:i', strtotime($u['data_cadastro'])) ?>
+                                        </td>
+                                        <td>
+                                            <div class="actions-cell">
+                                                <a 
+                                                    href="index.php?url=aprovar_usuario&id=<?= (int)$u['id_usuario'] ?>" 
+                                                    class="btn-action btn-approve"
+                                                    title="Autorizar entrada no sistema"
+                                                >
+                                                    <i class="fas fa-check"></i> Autorizar
+                                                </a>
+                                                <a 
+                                                    href="index.php?url=rejeitar_usuario&id=<?= (int)$u['id_usuario'] ?>" 
+                                                    class="btn-action btn-reject"
+                                                    onclick="return confirm('Deseja realmente recusar o acesso de @<?= htmlspecialchars($u['usuario']) ?>?');"
+                                                    title="Recusar cadastro"
+                                                >
+                                                    <i class="fas fa-times"></i> Recusar
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
     </main>
 </body>
 </html>

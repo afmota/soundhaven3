@@ -46,7 +46,7 @@ use App\Controllers\DashboardController;
 $route = trim((string)($_GET['url'] ?? ''));
 
 // Lista de rotas públicas permitidas sem autenticação
-$publicRoutes = ['login', 'processar_login'];
+$publicRoutes = ['login', 'processar_login', 'cadastro', 'processar_cadastro'];
 
 // Guardião de rotas protegidas: se não estiver autenticado e a rota não for pública, redireciona para login
 if (!isset($_SESSION['usuario_id']) && !in_array($route, $publicRoutes)) {
@@ -54,8 +54,8 @@ if (!isset($_SESSION['usuario_id']) && !in_array($route, $publicRoutes)) {
     exit;
 }
 
-// Se já estiver autenticado e tentar acessar login ou a raiz vazia, vai para o dashboard
-if (isset($_SESSION['usuario_id']) && ($route === '' || $route === 'login')) {
+// Se já estiver autenticado e tentar acessar rotas públicas de login/cadastro ou a raiz vazia, vai para o dashboard
+if (isset($_SESSION['usuario_id']) && ($route === '' || in_array($route, $publicRoutes))) {
     header('Location: index.php?url=dashboard');
     exit;
 }
@@ -75,6 +75,14 @@ switch ($route) {
         (new AuthController())->login();
         break;
 
+    case 'cadastro':
+        (new AuthController())->showRegisterForm();
+        break;
+
+    case 'processar_cadastro':
+        (new AuthController())->register();
+        break;
+
     case 'logout':
         (new AuthController())->logout();
         break;
@@ -83,8 +91,15 @@ switch ($route) {
         (new DashboardController())->index();
         break;
 
+    case 'aprovar_usuario':
+        (new DashboardController())->approveUser((int)($_GET['id'] ?? 0));
+        break;
+
+    case 'rejeitar_usuario':
+        (new DashboardController())->rejectUser((int)($_GET['id'] ?? 0));
+        break;
+
     default:
-        // Qualquer rota não reconhecida para usuário logado leva ao dashboard
         if (isset($_SESSION['usuario_id'])) {
             (new DashboardController())->index();
         } else {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SoundHaven 3 - Login</title>
+    <title>SoundHaven 3 - Solicitar Cadastro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="assets/images/SoundHaven.ico">
     <style>
@@ -45,12 +45,12 @@
                 radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.18) 0%, transparent 45%),
                 radial-gradient(circle at 85% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 45%);
             color: var(--text-primary);
-            padding: 20px;
+            padding: 24px 20px;
         }
 
         .auth-container {
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
         }
 
         .auth-card {
@@ -59,7 +59,7 @@
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border-color);
             border-radius: 20px;
-            padding: 40px 32px;
+            padding: 36px 32px;
             box-shadow: 0 16px 40px var(--card-shadow);
             text-align: center;
         }
@@ -68,33 +68,33 @@
             display: inline-flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             text-decoration: none;
         }
 
         .auth-logo img {
-            width: 72px;
+            width: 64px;
             height: auto;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             filter: drop-shadow(0 4px 12px rgba(139, 92, 246, 0.3));
         }
 
         .auth-logo-fallback {
-            width: 64px;
-            height: 64px;
+            width: 58px;
+            height: 58px;
             border-radius: 16px;
             background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 26px;
             color: #fff;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             box-shadow: 0 8px 20px rgba(139, 92, 246, 0.35);
         }
 
         .auth-logo-text {
-            font-size: 1.85rem;
+            font-size: 1.7rem;
             font-weight: 800;
             background: linear-gradient(to right, #fff, #cbd5e1);
             -webkit-background-clip: text;
@@ -103,11 +103,11 @@
         }
 
         .auth-logo-subtitle {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 3px;
-            margin-top: 4px;
+            margin-top: 3px;
             font-weight: 600;
         }
 
@@ -115,7 +115,14 @@
             font-size: 1.15rem;
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 24px;
+            margin-bottom: 6px;
+        }
+
+        .auth-note {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.4;
         }
 
         .alert {
@@ -142,14 +149,8 @@
             color: var(--info-text);
         }
 
-        .alert-success {
-            background-color: var(--success-bg);
-            border: 1px solid var(--success-border);
-            color: var(--success-text);
-        }
-
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             text-align: left;
         }
 
@@ -157,7 +158,7 @@
             display: block;
             color: var(--text-secondary);
             font-size: 0.85rem;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 500;
         }
 
@@ -171,7 +172,7 @@
             position: absolute;
             left: 14px;
             color: var(--text-muted);
-            font-size: 1rem;
+            font-size: 0.95rem;
             pointer-events: none;
         }
 
@@ -181,8 +182,8 @@
             border: 1px solid var(--border-color);
             border-radius: 10px;
             color: var(--text-primary);
-            padding: 12px 42px 12px 42px;
-            font-size: 0.95rem;
+            padding: 11px 40px 11px 40px;
+            font-size: 0.92rem;
             outline: none;
             transition: all 0.2s ease;
         }
@@ -201,7 +202,7 @@
             color: var(--text-muted);
             cursor: pointer;
             padding: 6px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             transition: color 0.2s;
         }
 
@@ -219,8 +220,8 @@
             font-weight: 600;
             cursor: pointer;
             width: 100%;
-            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
-            margin-top: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 12px;
             box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35);
         }
 
@@ -229,42 +230,34 @@
             box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
         }
 
-        .btn-submit:active {
-            transform: translateY(0);
-        }
-
-        .auth-register-link {
+        .auth-login-link {
             margin-top: 20px;
             font-size: 0.9rem;
             color: var(--text-secondary);
         }
 
-        .auth-register-link a {
+        .auth-login-link a {
             color: var(--accent-start);
             text-decoration: none;
             font-weight: 600;
             transition: color 0.2s;
         }
 
-        .auth-register-link a:hover {
+        .auth-login-link a:hover {
             color: var(--accent-end);
             text-decoration: underline;
         }
 
         .auth-footer {
-            margin-top: 24px;
-            padding-top: 16px;
+            margin-top: 20px;
+            padding-top: 14px;
             border-top: 1px solid var(--border-color);
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: var(--text-muted);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
-        }
-
-        .auth-footer i {
-            font-size: 0.75rem;
         }
     </style>
 </head>
@@ -283,7 +276,8 @@
                 <div class="auth-logo-subtitle">Acervo Musical &bull; v3</div>
             </div>
 
-            <h2 class="auth-title">Acessar o Sistema</h2>
+            <h2 class="auth-title">Solicitar Cadastro</h2>
+            <p class="auth-note">Após o envio, o administrador deverá autorizar a sua entrada para liberação do acesso.</p>
 
             <?php if (!empty($mensagemErro)): ?>
                 <div class="alert alert-danger" role="alert">
@@ -292,23 +286,26 @@
                 </div>
             <?php endif; ?>
 
-            <?php if (!empty($mensagemInfo)): ?>
-                <div class="alert alert-info" role="alert">
-                    <i class="fas fa-clock"></i>
-                    <div><?= htmlspecialchars($mensagemInfo) ?></div>
-                </div>
-            <?php endif; ?>
-
-            <?php if (!empty($mensagemSucesso)): ?>
-                <div class="alert alert-success" role="alert">
-                    <i class="fas fa-check-circle"></i>
-                    <div><?= htmlspecialchars($mensagemSucesso) ?></div>
-                </div>
-            <?php endif; ?>
-
-            <form action="index.php?url=processar_login" method="POST" autocomplete="on">
+            <form action="index.php?url=processar_cadastro" method="POST" autocomplete="off">
                 <div class="form-group">
-                    <label for="usuario">Usuário</label>
+                    <label for="nome">Nome Completo</label>
+                    <div class="input-group">
+                        <i class="fas fa-id-card icon-prefix"></i>
+                        <input 
+                            type="text" 
+                            id="nome" 
+                            name="nome" 
+                            class="form-control" 
+                            placeholder="Seu nome completo" 
+                            value="<?= htmlspecialchars($oldNome ?? '') ?>"
+                            required 
+                            autofocus
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="usuario">Nome de Usuário</label>
                     <div class="input-group">
                         <i class="fas fa-user icon-prefix"></i>
                         <input 
@@ -316,9 +313,9 @@
                             id="usuario" 
                             name="usuario" 
                             class="form-control" 
-                            placeholder="Informe seu usuário" 
+                            placeholder="ex: joaosilva" 
+                            value="<?= htmlspecialchars($oldUsuario ?? '') ?>"
                             required 
-                            autofocus 
                             autocomplete="username"
                         >
                     </div>
@@ -333,44 +330,64 @@
                             id="senha" 
                             name="senha" 
                             class="form-control" 
-                            placeholder="Digite sua senha" 
+                            placeholder="Mínimo de 6 caracteres" 
                             required 
-                            autocomplete="current-password"
+                            autocomplete="new-password"
                         >
-                        <button type="button" class="btn-toggle-password" id="togglePassword" aria-label="Mostrar senha">
-                            <i class="fas fa-eye" id="togglePasswordIcon"></i>
+                        <button type="button" class="btn-toggle-password" data-target="senha" aria-label="Mostrar senha">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmar_senha">Confirmar Senha</label>
+                    <div class="input-group">
+                        <i class="fas fa-shield-alt icon-prefix"></i>
+                        <input 
+                            type="password" 
+                            id="confirmar_senha" 
+                            name="confirmar_senha" 
+                            class="form-control" 
+                            placeholder="Repita a senha" 
+                            required 
+                            autocomplete="new-password"
+                        >
+                        <button type="button" class="btn-toggle-password" data-target="confirmar_senha" aria-label="Mostrar confirmação de senha">
+                            <i class="fas fa-eye"></i>
                         </button>
                     </div>
                 </div>
 
                 <button type="submit" class="btn-submit">
-                    <i class="fas fa-sign-in-alt"></i> Entrar
+                    <i class="fas fa-user-plus"></i> Enviar Solicitação
                 </button>
             </form>
 
-            <div class="auth-register-link">
-                Não possui uma conta? <a href="index.php?url=cadastro">Solicitar Cadastro</a>
+            <div class="auth-login-link">
+                Já possui uma conta? <a href="index.php?url=login">Fazer Login</a>
             </div>
 
             <div class="auth-footer">
-                <i class="fas fa-shield-alt"></i>
-                <span>Sessão protegida com timeout automático de 30 min</span>
+                <i class="fas fa-user-shield"></i>
+                <span>Liberação sob aprovação do administrador</span>
             </div>
         </div>
     </div>
 
     <script>
-        const toggleBtn = document.getElementById('togglePassword');
-        const passwordInput = document.getElementById('senha');
-        const toggleIcon = document.getElementById('togglePasswordIcon');
-
-        if (toggleBtn && passwordInput && toggleIcon) {
-            toggleBtn.addEventListener('click', () => {
-                const isPassword = passwordInput.type === 'password';
-                passwordInput.type = isPassword ? 'text' : 'password';
-                toggleIcon.className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
+        document.querySelectorAll('.btn-toggle-password').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetId = btn.getAttribute('data-target');
+                const input = document.getElementById(targetId);
+                const icon = btn.querySelector('i');
+                if (input && icon) {
+                    const isPassword = input.type === 'password';
+                    input.type = isPassword ? 'text' : 'password';
+                    icon.className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
+                }
             });
-        }
+        });
     </script>
 </body>
 </html>
