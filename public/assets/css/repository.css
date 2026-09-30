@@ -1,0 +1,922 @@
+/* ==========================================================================
+   GRID DE CARDS
+   ==========================================================================*/
+/* PAGINAÇÃO */
+/*.highlight-verde {
+    color: var(--accent-colecao) !important;
+    font-weight: bold;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif; 
+}
+
+a {
+    color: var(--cor-destaque);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: #f59e0b;
+}
+
+/* Alerta de Erro e Sucesso*/
+/*.alerta {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    color: #fff;
+    border: 1px solid;
+}
+.alerta.erro {
+    background-color: #dc2626; 
+    border-color: #b91c1c;
+}
+.alerta.sucesso {
+    background-color: #10b981; 
+    border-color: #059669;
+}*/
+
+
+/* Card base */
+/* Arquivo: /public/css/_album_card.css */
+
+/* ====================================================== */
+/* ESTILOS DA LOJA / ÚLTIMAS AQUISIÇÕES - CARD MODERN)    */
+/* ====================================================== */
+
+/* Área da Capa */
+/*.album-cover-area {
+    aspect-ratio: 1 / 1; 
+    overflow: hidden;
+    position: relative;
+    border-radius: 12px 12px 0 0; 
+}
+
+.album-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+/* Placeholder (sem capa) */
+/*.album-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to bottom right, #8b5cf6, #ec4899, #f59e0b); 
+}
+
+.album-placeholder .fa-music {
+    font-size: 4em;
+    color: rgba(255, 255, 255, 0.8);
+}
+*/
+/* Etiqueta de Formato (CD/Vinyl) */
+/*.album-format-tag {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 4px 8px;
+    border-radius: 9999px;
+    font-size: 0.75em;
+    font-weight: 600;
+    z-index: 5;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.tag-vinyl { background-color: rgba(230, 126, 34, 0.95) !important; color: #fff; } /* Laranja escuro 
+.tag-cd    { background-color: rgba(52, 152, 219, 0.95) !important; color: #fff; } /* Azul 
+.tag-cdr   { background-color: rgba(192, 59, 59, 0.95) !important; color: #fff; } /* Laranja vibrante 
+.tag-dig   { background-color: rgba(46, 204, 113, 0.95) !important; color: #fff; } /* Verde (Digital) */
+
+
+/* Botão Editar 
+.btn-edit-album {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 10;
+    cursor: pointer;
+    line-height: 1; 
+}
+
+.btn-edit-album:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.btn-edit-album .fa-edit {
+    font-size: 0.9em;
+}
+
+/* Detalhes do Álbum 
+.album-details-content {
+    padding: 16px; 
+    color: var(--text-primary);
+}
+
+.album-title-h3 {
+    font-weight: 700;
+    font-size: 1.125em; 
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.3s;
+}
+
+.album-info-line {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+    font-size: 0.875em; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.album-info-line i {
+    margin-right: 8px;
+    font-size: 0.85em;
+}
+
+/* Linha Artista 
+.artist-line {
+    color: #ccc; 
+    margin-bottom: 8px;
+}
+
+/* Linha Gravadora 
+.label-line {
+    color: var(--text-secondary); 
+    font-size: 0.75em; 
+}
+
+/* Linha Ano e Gênero 
+.year-genre-line {
+    display: flex; 
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-secondary); 
+    font-size: 0.75em; 
+}
+
+.year-genre-line .genre-tag {
+    color: #c084fc; 
+    font-weight: 500;
+}
+
+/* Linha Catálogo 
+.catalog-line {
+    color: #6b7280; 
+    font-size: 0.75em; 
+    margin-top: 4px;
+}
+
+/* Mensagem Sem Álbuns 
+.no-albums-message {
+    color: var(--cor-texto-secundaria);
+    padding: 20px 0;
+    font-size: 1.1em;
+}
+
+/* MEDIA QUERIES ESPECÍFICAS DA LOJA/CARD 
+
+@media (max-width: 768px) {
+    .recent-albums-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .recent-albums-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 420px) {
+     .recent-albums-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.page-header-actions {
+    /*display: flex; 
+    padding-top: 75px;
+    justify-content: space-between; /* Alinha Título e Botões 
+    align-items: center;
+    margin-bottom: 25px; 
+    flex-wrap: wrap; /* Permite quebrar em telas menores 
+    gap: 15px; /* Espaçamento entre o título e os botões 
+}
+
+
+/* Layout em Grid para a Coleção 
+.colecao-card-grid {
+    display: grid;
+    /* Força 5 colunas de tamanhos iguais 
+    grid-template-columns: repeat(5, 1fr); 
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Estilização do Card
+.colecao-item-card {
+    background: var(--cor-card);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--cor-borda);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.colecao-item-card:hover .album-format-tag {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.card-capa-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.colecao-capa-grande {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Tags de Formato (LP/CD) 
+.album-format-tag {
+    position: absolute;
+    top: 8px;    /* Distância do topo 
+    right: 8px;  /* Distância da direita 
+    padding: 3px 8px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    border-radius: 3px;
+    text-transform: uppercase;
+    z-index: 10;
+    
+    /* Estado inicial: Invisível 
+    opacity: 0;
+    transform: translateY(-5px); /* Pequeno efeito de deslizar 
+    transition: opacity 0.3s ease, transform 0.3s ease; 
+    
+    /* Garante que não estique 
+    height: auto;
+    width: auto;
+    display: inline-block;
+}
+
+.tag-vinyl { background: rgba(230, 126, 34, 0.9); color: #fff; }
+.tag-cd { background: rgba(52, 152, 219, 0.9); color: #fff; }
+.tag-cdr { background-color: #b13131; color: #fff; }
+
+/* Detalhes do Texto 
+.card-details-main {
+    padding: 12px;
+    text-align: center;
+}
+
+.card-titulo-minimal {
+    font-size: 1rem;
+    margin: 0 0 5px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-artista-minimal {
+    font-size: 0.85rem;
+    color: var(--cor-destaque);
+    margin: 0;
+}
+
+/* Estilo Base para os Botões de Ação 
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
+    gap: 8px; /* Espaço entre o ícone e o texto */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sombra para dar volume */
+}
+
+/* Botão Ativo / Selecionado (Destaque) 
+.primary-action {
+    background-color: var(--cor-borda, #007bff);
+    color: #ffffff !important;
+    border-color: rgba(0,0,0,0.1);
+}
+
+.primary-action:hover {
+    background-color: var(--cor-destaque-hover, #0056b3);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transform: translateY(-1px);
+}
+
+/* Botão Secundário / Não selecionado 
+.secondary-action {
+    background-color: var(--cor-borda, #f8f9fa);
+    color: var(--text-primary, #333) !important;
+    border-color: var(--cor-borda, #ddd);
+}
+
+.secondary-action:hover {
+    background-color: #e2e6ea;
+    border-color: #adb5bd;
+    color: #000 !important;
+}
+
+/* Efeito de clique (Active) 
+.btn-action:active {
+    transform: translateY(0);
+    box-shadow: inset 0 3px 5px rgba(0,0,0,0.125);
+}
+
+/* Ajuste específico para o botão de Lixeira quando ativo 
+.btn-lixeira-toggle.primary-action {
+    background-color: #dc3545; /* Vermelho para a lixeira 
+}
+
+.btn-lixeira-toggle.primary-action:hover {
+    background-color: #a71d2a;
+}
+
+/* Responsividade: Diminuir colunas em telas pequenas 
+@media (max-width: 1200px) { .colecao-card-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 992px) { .colecao-card-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px) { .colecao-card-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.mini-discografia-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.mini-album-item {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.mini-capa {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #444;
+    transition: transform 0.2s;
+}
+
+.mini-capa:hover {
+    transform: scale(1.1);
+    border-color: var(--cor-destaque);
+}
+
+.mini-titulo {
+    font-size: 0.7em;
+    color: #bbb;
+    margin-top: 5px;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 80px;
+}
+
+/*-------------------------------------------------------*/
+
+/* Layout Geral 
+.colecao-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    align-items: start;
+}
+
+/* Transformando Fieldset em Cards Elegantes 
+fieldset {
+    border: none;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+legend {
+    float: left;
+    width: 100%;
+    padding: 0;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #00d4ff; /* Azul Neon 
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Estilização dos Inputs 
+input, select, textarea {
+    width: 100%;
+    background: #1a1a1a !important;
+    border: 1px solid #333 !important;
+    border-radius: 8px !important;
+    color: #fff !important;
+    padding: 12px !important;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+    border-color: #00d4ff !important;
+    box-shadow: 0 0 8px rgba(0, 212, 255, 0.2);
+    outline: none;
+}
+
+/* A Tabela de Faixas (O Jardim)
+.tracklist-table {
+    border-collapse: separate;
+    border-spacing: 0 8px; /* Espaço entre as linhas 
+    margin-top: 0;
+}
+
+.tracklist-table th {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    color: #888;
+    padding: 10px;
+}
+
+.tracklist-table tr {
+    background: rgba(255, 255, 255, 0.02);
+    transition: transform 0.2s;
+}
+
+.tracklist-table tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: scale(1.01);
+}
+
+.editable-cell {
+    border: none !important;
+    background: transparent !important;
+    cursor: text;
+}
+
+.track-num {
+    color: #00d4ff;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 8px 0 0 8px;
+}
+
+/* Botões 
+.save-button {
+    background: linear-gradient(135deg, #007bff, #00d4ff);
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.save-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 212, 255, 0.3);
+}
+
+.btn-import {
+    background: #28a745;
+    border-radius: 8px;
+    border: none;
+    padding: 0 15px;
+}
+
+/* Ajuste para o botão de deletar faixa 
+.btn-remove {
+    color: #ff4d4d;
+    opacity: 0.5;
+    transition: 0.3s;
+}
+
+.btn-remove:hover {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+/* ========================================== */
+/* CUSTOM SELECT2 DARK MODE (STYLING)         */
+/* ========================================== */
+/* Limpeza total do Select2 para Dark Mode */
+
+/* 1. Container Principal 
+.select2-container--default .select2-selection--multiple {
+    background-color: #1a1a1a !important;
+    border: 1px solid #333 !important;
+    border-radius: 6px !important;
+    padding: 4px !important;
+    min-height: 42px !important;
+}
+
+/* 2. As Tags (Itens Selecionados) - Estilo "Pill" moderno 
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #2c2c2c !important; /* Fundo sóbrio 
+    border: 1px solid #444 !important;
+    color: #00d4ff !important; /* Texto na cor destaque 
+    border-radius: 4px !important;
+    padding: 3px 10px !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    margin-right: 5px !important;
+}
+
+/* Botão de fechar (X) da Tag *
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    color: #aaa6a6 !important;
+    border-right: none !important;
+    margin-right: 8px !important;
+    font-weight: bold !important;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+    background: transparent !important;
+    color: #ff0000 !important;
+}
+
+/* 3. Dropdown (A lista que abre) *
+.select2-dropdown {
+    background-color: #1a1a1a !important;
+    border: 1px solid #333 !important;
+    border-top: none !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8) !important;
+}
+
+/* 4. Itens da Lista *
+.select2-results__option {
+    background-color: #1a1a1a !important;
+    color: #bbb !important;
+    padding: 10px 15px !important;
+    font-size: 0.9rem !important;
+}
+
+/* Item focado/passando o mouse *
+.select2-results__option--highlighted[aria-selected] {
+    background-color: #00d4ff !important;
+    color: #000 !important; /* Inverte para contraste*
+}
+
+/* Item já selecionado *
+.select2-results__option[aria-selected=true] {
+    background-color: #252525 !important;
+    color: #555 !important;
+}
+
+/* 5. Campo de busca dentro do Select *
+.select2-search--inline .select2-search__field {
+    color: #fff !important;
+    margin-top: 7px !important;
+}
+
+.select2-search__field {
+    background: transparent !important; /* Fica da cor do fundo do select *
+    border: none !important;
+}
+
+/* Custom Select2 para Seleção Simples (Single) - Dark Mode */
+
+/* O "campo" onde aparece o nome selecionado *
+.select2-container--default .select2-selection--single {
+    background-color: #1a1a1a !important;
+    border: 1px solid #333 !important;
+    border-radius: 8px !important;
+    height: 45px !important; /* Altura aproximada dos seus outros inputs *
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* O texto dentro do campo simples *
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #fff !important;
+    padding-left: 12px !important;
+}
+
+/* A setinha do lado direito *
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 43px !important;
+}
+
+/* Ajuste do campo de busca que aparece quando o select simples está aberto *
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    background-color: #0f0f0f !important;
+    border: 1px solid #444 !important;
+    color: #fff !important;
+}
+
+.select2-results__option--highlighted {
+    background-color: #00d4ff !important; /* Cor neon que você usa *
+    color: #000 !important;
+}
+
+/* MEDIA QUERIES GERAIS *
+
+@media (max-width: 420px) {
+    .dashboard-title {
+        font-size: 1.5em;
+    }
+}
+
+/* Arquivo: /public/css/_metrics.css */
+
+/* ========================================= */
+/* 1. GRADE DE MÉTRICAS                      */
+/* ========================================= */
+
+/* ========================================= */
+/* 3. CARD ANIVERSÁRIO                      */
+/* ========================================= */
+
+/* 1. O Fundo Escuro (Overlay) *
+.modal-overlay {
+    display: none; /* Escondido por padrão, o JS muda para 'flex' *
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.85); /* Fundo preto semi-transparente *
+    z-index: 9999; /* Garante que fique acima de tudo *
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px); /* Efeito de desfoque no fundo *
+}
+
+.modal-grid {
+    display: grid;
+    grid-template-columns: 350px 1fr; /* Capa à esquerda, info à direita *
+    gap: 30px;
+}
+
+/* Estilo para a Tracklist *
+.modal-tracklist {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+    border-top: 1px solid var(--cor-borda);
+}
+
+.modal-tracklist li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--cor-borda);
+    display: flex;
+    justify-content: space-between;
+}
+
+.track-num { color: var(--cor-destaque); font-weight: bold; margin-right: 10px; }
+
+@media (max-width: 768px) {
+    .modal-grid { grid-template-columns: 1fr; }
+    .modal-col-capa { max-width: 250px; margin: 0 auto; }
+}
+
+/* Botão Positivo (Verde) *
+.btn-save {
+    background-color: var(--action-positive);
+    color: white;
+}
+.btn-save:hover {
+    background-color: var(--action-positive-hover);
+    border-color: var(--border-hover);
+}
+
+.btn-clear { 
+    width: 100%; 
+    background: transparent; 
+    border: 1px solid var(--border-color); 
+    color: var(--text-secondary); 
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    padding: 8px;
+    font-size: 0.8em;
+    border-radius: 4px;
+}
+
+.btn-acquire { background: var(--action-neutral); }
+/* Adicionado: Hover unificado sem quebrar seu width de 130px *
+.btn:hover {
+    filter: brightness(1.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+/***************************************/
+/* PÁGINAS DE EDIÇÃO          */
+/**************************************
+/* PADRONIZAÇÃO DOS CAMPOS DE EDIÇÃO (INPUT E SELECT) 
+
+.tag-item {
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.1);
+    color: #ccc;
+    padding: 2px 8px;
+    border-radius: 15px;
+    font-size: .7rem;
+}
+
+.tag-item.style-tag {
+    border-color: rgba(44,240,44,.3);
+    color: var(--border-light);
+}
+
+.placeholder-text {
+    color: #555;
+    font-style: italic;
+    font-size: .85rem;
+}
+
+/* tabela *
+.close-modal {
+    top: 10px;
+    right: 15px;
+    margin: 0;
+}
+
+.no-data {
+    font-size: 0.75rem;
+    color: #555;
+    font-style: italic;
+    margin-top: 5px;
+    display: block;
+}
+
+*/
+
+
+.release-year {
+    font-size: 0.75em;
+    color: var(--text-secondary);
+    margin-top: auto;
+    font-weight: 400;
+}
+
+#editModal .modal-content,
+#createModal .modal-content {
+    width: 700px;
+    min-height: 450px;
+    flex-direction: column;
+}
+
+/* Informações */
+/* Ajuste dos botões para caberem lado a lado
+.btn-acao-positiva {
+    background-color: var(--action-neutral);
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex; /* Alinha ícone e texto
+    align-items: center;
+    gap: 8px; /* Espaço entre o ícone e o texto
+    border-radius: 4px;
+    
+    /* Tipografia de Botão
+    font-family: inherit; 
+    font-size: 14px; 
+    font-weight: 600;
+    line-height: 1.2;
+
+    justify-content: center;
+    vertical-align: middle; /* Alinha a base com os outros botões
+    width: 120px;
+    height: 38px; /* Force uma altura idêntica à dos botões Editar/Descartar
+    box-sizing: border-box; /* Garante que bordas não empurrem o botão
+    transition: filter 0.2s; /* Hover suave sem mover o elemento
+}
+
+.btn-acao-positiva:hover {
+    filter: brightness(90%);
+    transform: none; /* Garante que nenhum efeito de movimento seja herdado
+}
+*/
+
+.artist-card img {
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
+}
+.artist-origin {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 4px;
+}
+
+/* Garante que a bandeira tenha um tamanho legal e não quebre a linha */
+#detalheBandeira {
+    display: inline-block;
+    width: 1.3em;
+    height: 1em;
+    margin-right: 8px;
+    border-radius: 2px; /* Um leve arredondado nas pontas fica bem moderno */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2); /* Sombra leve para destacar em fundos claros */
+    vertical-align: middle;
+}
+
+#nomePaisTexto {
+    vertical-align: middle;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+/* Estilo universal para as bandeiras do SoundHaven */
+.fi {
+    display: inline-block;
+    width: 1.33em;
+    line-height: 1em;
+    vertical-align: middle;
+    border-radius: 2px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+/* Ajuste específico para o card (grid) */
+.artist-origin .fi {
+    margin-right: 6px;
+    width: 18px; 
+}
+
+#detalhePaisArtista .fi {
+    margin-right: 10px;
+    width: 24px;
+}
+
+.chart-card {
+    padding: 20px;
+    background: var(--cor-background-card);
+    border-radius: 8px;
+}
+
+.center-value {
+    display: block;
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.center-label {
+    display: block;
+    font-size: 0.65rem;
+    color: #aaa;
+    text-transform: uppercase;
+    margin-top: 2px;
+}
+
+.colecao-module {
+    --bg-dark: #121212;
+    --bg-card: #1a1a1a;
+    --text-muted: #888;
+
+    /* sistema de espaçamento */
+    --space-xs: 3px;
+    --space-sm: 5px;
+    --space-md: 9px;
+    --space-lg: 13px;
+}
+
+    --space-md: 9px;
+/*****************************************************************************/
+/*                                  FILTROS                                  */
+/*****************************************************************************/
+
