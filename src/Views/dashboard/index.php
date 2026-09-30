@@ -412,7 +412,7 @@
 
         <div class="welcome-card">
             <h1>Olá, <?= htmlspecialchars($usuarioNome) ?>! 👋</h1>
-            <p>Você está autenticado no <strong>Soundhaven 3</strong>. O sistema de controle de acesso e proteção de rotas está operando normalmente.</p>
+            <p>Você está autenticado no <strong>Soundhaven 3</strong>. O sistema de controle de acesso, notificações e proteção de rotas está operando normalmente.</p>
         </div>
 
         <div class="grid">
@@ -453,7 +453,7 @@
                     <i class="fas fa-server card-icon"></i>
                 </div>
                 <div class="card-value">Docker</div>
-                <div class="card-desc">PHP <?= phpversion() ?> + Nginx + MySQL 8.0</div>
+                <div class="card-desc">PHP <?= phpversion() ?> + Nginx + MySQL + Mailpit</div>
             </div>
         </div>
 
@@ -471,6 +471,7 @@
                             <thead>
                                 <tr>
                                     <th>Nome Completo</th>
+                                    <th>E-mail</th>
                                     <th>Nome de Usuário</th>
                                     <th>Data da Solicitação</th>
                                     <th style="text-align: right;">Ações</th>
@@ -481,6 +482,11 @@
                                     <tr>
                                         <td>
                                             <div style="font-weight: 600;"><?= htmlspecialchars($u['nome']) ?></div>
+                                        </td>
+                                        <td>
+                                            <span style="color: var(--text-secondary); font-size: 0.88rem;">
+                                                <i class="fas fa-envelope" style="margin-right: 6px; font-size: 0.8rem; color: var(--accent-start);"></i><?= htmlspecialchars($u['email']) ?>
+                                            </span>
                                         </td>
                                         <td>
                                             <span style="color: var(--accent-start); font-weight: 500;">
@@ -495,7 +501,7 @@
                                                 <a 
                                                     href="index.php?url=aprovar_usuario&id=<?= (int)$u['id_usuario'] ?>" 
                                                     class="btn-action btn-approve"
-                                                    title="Autorizar entrada no sistema"
+                                                    title="Autorizar entrada no sistema e notificar por e-mail"
                                                 >
                                                     <i class="fas fa-check"></i> Autorizar
                                                 </a>

@@ -2,6 +2,7 @@
 namespace App\Controllers;
 
 use App\Config\Database;
+use App\Services\Mailer;
 use PDO;
 
 class DashboardController {
@@ -25,9 +26,9 @@ class DashboardController {
             $stmt = $db->query('SELECT COUNT(*) as total FROM tb_albuns');
             $totalAlbuns = (int)($stmt->fetch()['total'] ?? 0);
 
-            // Se for admin, carrega lista de usuários pendentes de autorização
+            // Se for admin, carrega lista de usuários pendentes de autorização (incluindo e-mail)
             if ($isAdmin) {
-                $stmtPendentes = $db->query("SELECT id_usuario, usuario, nome, data_cadastro FROM tb_usuarios WHERE status = 'pendente' ORDER BY data_cadastro DESC");
+                $stmtPendentes = $db->query("SELECT id_usuario, usuario, nome, email, data_cadastro FROM tb_usuarios WHERE status = 'pendente' ORDER BY data_cadastro DESC");
                 $usuariosPendentes = $stmtPendentes->fetchAll(PDO::FETCH_ASSOC);
             }
 
@@ -54,15 +55,27 @@ class DashboardController {
         try {
             $db = Database::getConnection();
 
-            // Obter dados do usuário para confirmação
-            $stmtUser = $db->prepare('SELECT usuario, nome FROM tb_usuarios WHERE id_usuario = :id AND status = "pendente"');
+            // Obter dados do usuário para confirmação e envio de e-mail
+            $stmtUser = $db->prepare('SELECT id_usuario, usuario, nome, email FROM tb_usuarios WHERE id_usuario = :id AND status = "pendente"');
             $stmtUser->execute([':id' => $id]);
             $user = $stmtUser->fetch(PDO::FETCH_ASSOC);
 
             if ($user) {
                 $stmt = $db->prepare('UPDATE tb_usuarios SET status = "ativo" WHERE id_usuario = :id');
                 $stmt->execute([':id' => $id]);
-                $_SESSION['flash_success'] = 'O usuário "' . htmlspecialchars($user['usuario']) . '" (' . htmlspecialchars($user['nome']) . ') foi autorizado com sucesso!';
+
+                // Disparar notificação por e-mail
+                $emailSent = false;
+                if (!empty($user['email'])) {
+                    $emailSent = Mailer::sendApprovalNotification($user['email'], $user['nome'], $user['usuario']);
+                }
+
+                if ($emailSent) {
+                    $_SESSION['flash_success'] = 'O usuário "' . htmlspecialchars($user['usuario']) . '" (' . htmlspecialchars($user['nome']) . ') foi autorizado com sucesso! Um e-mail de notificação foi enviado para ' . htmlspecialchars($user['email']) . '.';
+                } else {
+                    $_SESSION['flash_success'] = 'O usuário "' . htmlspecialchars($user['usuario']) . '" foi autorizado com sucesso. (Aviso: não foi possível enviar o e-mail de notificação).';
+                }
+
             } else {
                 $_SESSION['flash_error'] = 'Usuário não encontrado ou já processado.';
             }

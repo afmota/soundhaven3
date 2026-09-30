@@ -1,4 +1,4 @@
-﻿version: '3.8'
+version: '3.8'
 
 services:
   db:
@@ -16,6 +16,14 @@ services:
       - soundhaven3_db_data:/var/lib/mysql
       - ./docker/mysql/init:/docker-entrypoint-initdb.d:ro
 
+  mail:
+    image: axllent/mailpit:latest
+    container_name: soundhaven3-mail
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
   php:
     build:
       context: .
@@ -29,6 +37,7 @@ services:
       - .:/var/www/html
     depends_on:
       - db
+      - mail
 
   nginx:
     image: nginx:alpine

@@ -277,7 +277,7 @@
             </div>
 
             <h2 class="auth-title">Solicitar Cadastro</h2>
-            <p class="auth-note">Após o envio, o administrador deverá autorizar a sua entrada para liberação do acesso.</p>
+            <p class="auth-note">Após a aprovação do administrador, você receberá a notificação de liberação em seu e-mail.</p>
 
             <?php if (!empty($mensagemErro)): ?>
                 <div class="alert alert-danger" role="alert">
@@ -300,6 +300,23 @@
                             value="<?= htmlspecialchars($oldNome ?? '') ?>"
                             required 
                             autofocus
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <div class="input-group">
+                        <i class="fas fa-envelope icon-prefix"></i>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            class="form-control" 
+                            placeholder="seu.email@exemplo.com" 
+                            value="<?= htmlspecialchars($oldEmail ?? '') ?>"
+                            required 
+                            autocomplete="email"
                         >
                     </div>
                 </div>
@@ -369,8 +386,8 @@
             </div>
 
             <div class="auth-footer">
-                <i class="fas fa-user-shield"></i>
-                <span>Liberação sob aprovação do administrador</span>
+                <i class="fas fa-envelope-circle-check"></i>
+                <span>Notificação enviada por e-mail após aprovação</span>
             </div>
         </div>
     </div>

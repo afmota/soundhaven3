@@ -37,7 +37,7 @@ class AuthController {
 
         try {
             $db = Database::getConnection();
-            $stmt = $db->prepare('SELECT id_usuario, usuario, nome, senha, status FROM tb_usuarios WHERE usuario = :usuario LIMIT 1');
+            $stmt = $db->prepare('SELECT id_usuario, usuario, nome, email, senha, status FROM tb_usuarios WHERE usuario = :usuario LIMIT 1');
             $stmt->execute([':usuario' => $usuario]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -46,7 +46,7 @@ class AuthController {
                 $status = strtolower(trim((string)$user['status']));
 
                 if ($status === 'pendente') {
-                    $_SESSION['flash_info'] = 'Seu cadastro está aguardando a autorização do administrador. Por favor, aguarde a liberação do seu acesso.';
+                    $_SESSION['flash_info'] = 'Seu cadastro está aguardando a autorização do administrador. Você receberá um e-mail assim que seu acesso for liberado.';
                     header('Location: index.php?url=login');
                     exit;
                 }
@@ -69,6 +69,7 @@ class AuthController {
                 $_SESSION['usuario_id'] = (int)$user['id_usuario'];
                 $_SESSION['usuario_login'] = $user['usuario'];
                 $_SESSION['usuario_nome'] = $user['nome'];
+                $_SESSION['usuario_email'] = $user['email'];
                 $_SESSION['last_activity'] = time();
 
                 header('Location: index.php?url=dashboard');
@@ -97,6 +98,7 @@ class AuthController {
         $mensagemSucesso = $_SESSION['flash_success'] ?? null;
 
         $oldNome = $_SESSION['old_nome'] ?? '';
+        $oldEmail = $_SESSION['old_email'] ?? '';
         $oldUsuario = $_SESSION['old_usuario'] ?? '';
 
         unset(
@@ -104,6 +106,7 @@ class AuthController {
             $_SESSION['flash_info'],
             $_SESSION['flash_success'],
             $_SESSION['old_nome'],
+            $_SESSION['old_email'],
             $_SESSION['old_usuario']
         );
 
@@ -117,14 +120,16 @@ class AuthController {
         }
 
         $nome = trim($_POST['nome'] ?? '');
+        $email = strtolower(trim($_POST['email'] ?? ''));
         $usuario = trim($_POST['usuario'] ?? '');
         $senha = trim($_POST['senha'] ?? '');
         $confirmarSenha = trim($_POST['confirmar_senha'] ?? '');
 
         $_SESSION['old_nome'] = $nome;
+        $_SESSION['old_email'] = $email;
         $_SESSION['old_usuario'] = $usuario;
 
-        if (empty($nome) || empty($usuario) || empty($senha) || empty($confirmarSenha)) {
+        if (empty($nome) || empty($email) || empty($usuario) || empty($senha) || empty($confirmarSenha)) {
             $_SESSION['flash_error'] = 'Por favor, preencha todos os campos do formulário.';
             header('Location: index.php?url=cadastro');
             exit;
@@ -132,6 +137,12 @@ class AuthController {
 
         if (mb_strlen($nome) < 3) {
             $_SESSION['flash_error'] = 'O nome completo deve conter pelo menos 3 caracteres.';
+            header('Location: index.php?url=cadastro');
+            exit;
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $_SESSION['flash_error'] = 'Por favor, informe um endereço de e-mail válido.';
             header('Location: index.php?url=cadastro');
             exit;
         }
@@ -166,18 +177,28 @@ class AuthController {
                 exit;
             }
 
+            // Verificar se o e-mail já existe
+            $stmtCheckEmail = $db->prepare('SELECT COUNT(*) as total FROM tb_usuarios WHERE email = :email');
+            $stmtCheckEmail->execute([':email' => $email]);
+            if ((int)($stmtCheckEmail->fetch()['total'] ?? 0) > 0) {
+                $_SESSION['flash_error'] = 'Este endereço de e-mail já está cadastrado em outra conta.';
+                header('Location: index.php?url=cadastro');
+                exit;
+            }
+
             // Criptografar a senha e inserir com status pendente
             $hash = password_hash($senha, PASSWORD_DEFAULT);
-            $stmtInsert = $db->prepare('INSERT INTO tb_usuarios (usuario, nome, senha, status) VALUES (:usuario, :nome, :senha, "pendente")');
+            $stmtInsert = $db->prepare('INSERT INTO tb_usuarios (usuario, nome, email, senha, status) VALUES (:usuario, :nome, :email, :senha, "pendente")');
             $stmtInsert->execute([
                 ':usuario' => $usuario,
                 ':nome' => $nome,
+                ':email' => $email,
                 ':senha' => $hash,
             ]);
 
-            unset($_SESSION['old_nome'], $_SESSION['old_usuario']);
+            unset($_SESSION['old_nome'], $_SESSION['old_email'], $_SESSION['old_usuario']);
 
-            $_SESSION['flash_info'] = 'Cadastro realizado com sucesso! Sua conta está aguardando a autorização do administrador para que você possa acessar o sistema.';
+            $_SESSION['flash_info'] = 'Cadastro realizado com sucesso! Sua conta está aguardando a autorização do administrador. Assim que aprovada, você receberá uma notificação em ' . htmlspecialchars($email) . '.';
             header('Location: index.php?url=login');
             exit;
 
