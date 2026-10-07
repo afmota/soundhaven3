@@ -42,6 +42,7 @@ require_once __DIR__ . '/../autoload.php';
 
 use App\Controllers\AuthController;
 use App\Controllers\DashboardController;
+use App\Controllers\LojaController;
 
 $route = trim((string)($_GET['url'] ?? ''));
 
@@ -97,6 +98,14 @@ switch ($route) {
 
     case 'rejeitar_usuario':
         (new DashboardController())->rejectUser((int)($_GET['id'] ?? 0));
+        break;
+
+    case 'loja':
+        (new LojaController())->index();
+        break;
+
+    case 'novo_album_loja':
+        (new LojaController())->novoAlbum();
         break;
 
     default:

@@ -1,11 +1,11 @@
 /**
- * SoundHaven - Script Global de Interatividade
+ * SoundHaven - Script Global de Interatividade da Loja
  */
 document.addEventListener('DOMContentLoaded', () => {
     // Referências dos Modais
     const modal = document.getElementById('albumModal');
     const editModal = document.getElementById('editModal');
-    const createModal = document.getElementById('createModal'); // Novo modal
+    const createModal = document.getElementById('createModal');
 
     let currentAlbumData = null;
 
@@ -33,8 +33,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (e) => {
         const card = e.target.closest('.album-card');
         if (card) {
-            currentAlbumData = JSON.parse(card.getAttribute('data-album'));
-            openModal(currentAlbumData);
+            try {
+                currentAlbumData = JSON.parse(card.getAttribute('data-album'));
+                openModal(currentAlbumData);
+            } catch (err) {
+                console.error("Erro ao ler dados do álbum:", err);
+            }
         }
     });
 
@@ -50,23 +54,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- 3. MENU DE PERFIL ---
-    const avatarTrigger = document.getElementById('avatarTrigger');
-    const dropdown = document.getElementById('myDropdown');
+    if (!window.__headerDropdownInitialized) {
+        const avatarTrigger = document.getElementById('avatarTrigger');
+        const dropdown = document.getElementById('myDropdown');
 
-    if (avatarTrigger) {
-        avatarTrigger.addEventListener('click', (e) => {
-            e.stopPropagation();
-            dropdown.classList.toggle('show');
-        });
+        if (avatarTrigger && dropdown) {
+            avatarTrigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                dropdown.classList.toggle('show');
+            });
+        }
     }
 
     // --- 4. FECHAR AO CLICAR FORA ---
     window.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
         if (e.target === editModal) closeEditModal();
-        if (e.target === createModal) closeCreateModal(); // Fecha inclusão
+        if (e.target === createModal) closeCreateModal();
 
-        if (dropdown && !dropdown.contains(e.target) && !avatarTrigger.contains(e.target)) {
+        const dropdown = document.getElementById('myDropdown');
+        const avatarTrigger = document.getElementById('avatarTrigger');
+        if (dropdown && !dropdown.contains(e.target) && (!avatarTrigger || !avatarTrigger.contains(e.target))) {
             dropdown.classList.remove('show');
         }
     });
@@ -78,91 +86,103 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // MODAL DE DETALHES
 function openModal(album) {
-    // 1. Preenchimento visual (o que já funcionava e não mexe no fluxo)
-    document.getElementById('modalTitle').innerText = album.titulo;
-    document.getElementById('modalArtist').innerText = album.artista_nome;
-    document.getElementById('modalLabel').innerText = album.gravadora_nome || 'N/D';
-    document.getElementById('modalDate').innerText = formatDate(album.data_lancamento);
-    document.getElementById('modalImg').src = album.capa_url || 'assets/images/placeholder.jpg';
-    document.getElementById('modalType').innerText = album.tipo_desc || 'N/D';
+    if (!album) return;
 
-    // 2. Prepara o ID de descarte (que você disse que funciona)
-    const deleteIdField = document.getElementById('deleteId');
-    if (deleteIdField) deleteIdField.value = album.album_id;
+    const setTxt = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.innerText = val || 'N/D';
+    };
 
-    // 3. A CHINELADA: Redirecionamento forçado e isolado
-    const btn = document.getElementById('btnAdquirirDireto');
-    if (btn) {
-        // Removemos qualquer comportamento antigo
-        btn.onclick = null;
+    setTxt('modalTitle', album.titulo);
+    setTxt('modalArtist', album.artista_nome || album.artista);
+    setTxt('modalLabel', album.gravadora_nome || album.gravadora);
+    setTxt('modalDate', formatDate(album.data_lancamento));
+    setTxt('modalType', album.tipo_desc || album.tipo_album);
 
-        // Definimos o novo comportamento NA HORA
-        btn.onclick = function (e) {
-            // Impede que o clique "vaze" para o resto da página (mata a propagação)
-            e.preventDefault();
-            e.stopPropagation();
+    const price = album.preco_sugerido || album.preco;
+    setTxt('modalPrice', price ? 'R$ ' + parseFloat(price).toFixed(2).replace('.', ',') : 'N/D');
 
-            // Vai direto para o alvo
-            window.location.href = `index.php?url=adquirir_album&id=${album.album_id}`;
-        };
+    setTxt('modalUser', album.usuario || 'N/D');
+
+    const modalImg = document.getElementById('modalImg');
+    if (modalImg) {
+        modalImg.src = album.capa_url || album.url_capa || 'assets/images/placeholder.jpg';
+        modalImg.onerror = function() { this.src = 'assets/images/placeholder.jpg'; };
     }
 
-    // Exibe o modal
-    document.getElementById('albumModal').style.display = "block";
+    const deleteIdField = document.getElementById('deleteId');
+    if (deleteIdField) {
+        deleteIdField.value = album.album_id || album.id_album || '';
+    }
+
+    const modal = document.getElementById('albumModal');
+    if (modal) modal.style.display = "block";
 }
 
 function closeModal() {
-    document.getElementById('albumModal').style.display = "none";
+    const modal = document.getElementById('albumModal');
+    if (modal) modal.style.display = "none";
 }
 
 // MODAL DE EDIÇÃO
 function openEditModal(album) {
+    if (!album) return;
+
     const setVal = (id, value) => {
         const el = document.getElementById(id);
         if (el) el.value = (value !== null && value !== undefined) ? String(value) : "";
     };
 
     const headerTitle = document.getElementById('editModalHeaderTitle');
-    if (headerTitle) headerTitle.innerText = `Editar ${album.titulo}`;
+    if (headerTitle) headerTitle.innerText = `Editar ${album.titulo || ''}`;
 
     const imgPreview = document.getElementById('editModalImg');
-    if (imgPreview) imgPreview.src = album.capa_url || 'assets/images/placeholder.jpg';
+    if (imgPreview) {
+        imgPreview.src = album.capa_url || album.url_capa || 'assets/images/placeholder.jpg';
+        imgPreview.onerror = function() { this.src = 'assets/images/placeholder.jpg'; };
+    }
 
-    setVal('editModalAlbumId', album.album_id);
-    setVal('editModalCapaUrl', album.capa_url || '');
-    setVal('editModalTitulo', album.titulo);
-    setVal('editModalArtista', album.artista_id);
-    //setVal('editModalGravadora', album.gravadora_id);
-    setVal('editModalGravadora', album.gravadora_nome || '');
-    setVal('editModalTipo', album.tipo_id);
+    setVal('editModalAlbumId', album.album_id || album.id_album);
+    setVal('editModalCapaUrl', album.capa_url || album.url_capa || '');
+    setVal('editModalTitulo', album.titulo || '');
+    setVal('editModalArtista', album.artista || album.artista_nome || '');
+    setVal('editModalGravadora', album.gravadora || album.gravadora_nome || '');
+    setVal('editModalTipo', album.tipo_album || album.tipo_desc || '');
     setVal('editModalData', album.data_lancamento || '');
+    setVal('editModalPreco', album.preco_sugerido || album.preco || '');
+    setVal('editModalCatalogo', album.num_catalogo || album.numero_catalogo || '');
+    setVal('editModalGenero', album.genero || '');
+    setVal('editModalEstilo', album.estilo || '');
 
-    document.getElementById('editModal').style.display = "block";
+    const editModal = document.getElementById('editModal');
+    if (editModal) editModal.style.display = "block";
 }
 
 function closeEditModal() {
-    document.getElementById('editModal').style.display = "none";
+    const editModal = document.getElementById('editModal');
+    if (editModal) editModal.style.display = "none";
 }
 
-// MODAL DE INCLUSÃO (NOVO)
+// MODAL DE INCLUSÃO
 function openCreateModal() {
-    document.getElementById('createModal').style.display = "block";
+    const createModal = document.getElementById('createModal');
+    if (createModal) createModal.style.display = "block";
 }
 
 function closeCreateModal() {
-    const modal = document.getElementById('createModal');
-    modal.style.display = "none";
-    // Limpa o formulário para a próxima vez
-    const form = modal.querySelector('form');
-    if (form) form.reset();
-    // Reseta o preview da imagem para o placeholder
-    const preview = document.getElementById('createModalImg');
-    if (preview) preview.src = 'assets/images/placeholder.jpg';
+    const createModal = document.getElementById('createModal');
+    if (createModal) {
+        createModal.style.display = "none";
+        const form = createModal.querySelector('form');
+        if (form) form.reset();
+        const preview = document.getElementById('createModalImg');
+        if (preview) preview.src = 'assets/images/placeholder.jpg';
+    }
 }
 
 // FORMATADOR DE DATA
 function formatDate(dateStr) {
-    if (!dateStr || dateStr === 'N/D') return 'N/D';
+    if (!dateStr || dateStr === 'N/D' || dateStr === '0000-00-00') return 'N/D';
     const parts = dateStr.split('-');
     return parts.length !== 3 ? dateStr : `${parts[2]}/${parts[1]}/${parts[0]}`;
 }

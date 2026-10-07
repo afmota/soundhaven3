@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SoundHaven 3 - Painel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/header.css">
     <link rel="icon" type="image/x-icon" href="assets/images/SoundHaven.ico">
     <style>
         :root {
@@ -39,6 +40,7 @@
             color: var(--text-primary);
             display: flex;
             flex-direction: column;
+            padding-top: 70px;
         }
 
         header {
@@ -350,32 +352,7 @@
     </style>
 </head>
 <body>
-    <header>
-        <a href="index.php?url=dashboard" class="brand">
-            <?php if (file_exists(__DIR__ . '/../../../public/assets/images/SoundHaven.png')): ?>
-                <img src="assets/images/SoundHaven.png" alt="Logo">
-            <?php else: ?>
-                <i class="fas fa-compact-disc" style="color: #8b5cf6; font-size: 24px;"></i>
-            <?php endif; ?>
-            <span class="brand-text">SoundHaven</span>
-            <span class="brand-badge">v3</span>
-        </a>
-
-        <div class="user-nav">
-            <div class="user-info">
-                <div class="user-avatar">
-                    <?= strtoupper(substr($usuarioNome, 0, 1)) ?>
-                </div>
-                <div>
-                    <div style="font-weight: 600;"><?= htmlspecialchars($usuarioNome) ?></div>
-                    <div style="font-size: 0.75rem; color: var(--text-secondary);">@<?= htmlspecialchars($usuarioLogin) ?></div>
-                </div>
-            </div>
-            <a href="index.php?url=logout" class="btn-logout">
-                <i class="fas fa-sign-out-alt"></i> Sair
-            </a>
-        </div>
-    </header>
+    <?php include __DIR__ . '/../partials/header.php'; ?>
 
     <main>
         <?php if (!empty($mensagemSucesso)): ?>
